@@ -26,10 +26,10 @@ switch problem
         % Coordinates of v:
         x = [0, 1]; y = [0, 1]; z = [0, 1, 2];
         it = 1;
-        for k = 1:length(z)
+        for pen = 1:length(z)
             for j = 1:length(y)
                 for i = 1:length(x)
-                    v(:,it) = [x(i); y(j); z(k)];
+                    v(:,it) = [x(i); y(j); z(pen)];
                     it = it + 1;
                 end
             end
@@ -39,11 +39,14 @@ switch problem
 
 
         % Force on each node
-        force = zeros(3*n,1);
-        f_ext = zeros(3*(n-ns),1);
+        f_ext = spalloc(3 * (n - ns), 1, 0);
         % only non-zero ext load: top node [0.5, 0.5, 2.5] which is node n
-        f_ext(end-2:end) = [0; 0; -1];
+        f_ext(end-2 : end) = [0; 0; -1];
 
+        I_supp = [speye(3 * ns); spalloc(3 * (n - ns), 3 * ns, 0)];
+        I_ext = [spalloc(3 * ns, 3 * (n - ns), 0); speye(3 * (n - ns))];
+
+        force = I_supp * f_supp + I_ext * f_ext;
 
 
         % Length of bars [first node, second node, lenght]
@@ -70,12 +73,12 @@ switch problem
         B = zeros(3*n, m);
         for i = 1:n
             for j = 1:m
-                for k = 1:3
+                for pen = 1:3
 
                     if l(j,1) == i
-                        B(3*(i-1)+k, j) = -tau(k,j);     
+                        B(3*(i-1)+pen, j) = -tau(pen,j);     
                     elseif l(j,2) == i
-                        B(3*(i-1)+k, j) = tau(k,j);
+                        B(3*(i-1)+pen, j) = tau(pen,j);
                     end
 
                 end
@@ -118,16 +121,42 @@ switch problem
                         hess_f_Afsupp hess_f_qfsupp hess_f_fsuppfsupp];
                     
         % Constraint
-        constraint = @(q, f_supp) B*q - I_supp*f_supp - I_ext*f_ext;
+        c = @(q, f_supp) B*q - I_supp*f_supp - I_ext*f_ext;
         
         % Jacobian matrix of the constraints:
-        grad_c = [zeros(3*n, m), B, -I_supp];
+        grad_c = [zeros(3*n, m) B, -I_supp];
                     
         
-        newton = @(A,q) [hess_f(A,q) -grad_c;
+        newton = @(A,q) [hess_f(A,q) -grad_c';
                         grad_c zeros(3*ns+2*m)];
-                    
-        s = @(A,q,fsupp) [-grad_f(A,q); -constraint(q,fsupp)];
+        
+        % Vector in the newton's iteration
+        s = @(A,q,f_supp) [-grad_f(A,q); -c(q,f_supp)];
+        
+        % Penalty Parameter (mu in book)
+        pen = 0.5;
+        
+        
+        merit = @(A,q,f_supp,k) f(A,q) + k*abs(c(q,f_supp));
+        
+        dir_D = @(A,q,f_supp,k,p) grad_f(A,q,f_supp)'*p - k*abs(c(q,f_supp));
+        
+        alpha = 1;
+        
+        nu = 0.25;
+        
+        t = 0.5;
+        
+        
+        while merit(A + alpha*p(1),q + aplha*p(2),f_supp + aplha*p(3),pen) <= merit(A,q,f_supp,pen) + nu*aplha*dir_D(A,q,f_supp,pen,p)
+            
+            interpol = 
+            
+            alpha = t*aplha
+            
+            
+            
+        end
         
         
 end
