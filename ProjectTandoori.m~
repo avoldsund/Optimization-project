@@ -144,33 +144,50 @@ function optimal = ProjectTandoori()
 
             t = 0.5;
             
+            i = 0;
             
+            alpha_store(1) = alpha;
             
-            while (M-sum(rho*l.*A)) > 0 && ~(find((A-A_bottom).*(A_top-A) < 0 ))
-               
-                if isValid(alpha,A,q,f_supp,pen,p,eta)
-                    break
-                   
-                else
-                   % Quadratic interpolation
-                   
-                   alpha_new = quadInterpol(alpha);
-                end
+            while (M-sum(rho*l.*A)) > 0 && ~(find((A-A_bottom).*(A_top-A) < 0 && ~isValid(alpha)
                 
-                if isValid(alpha_new,A,q,f_supp,pen,p,eta)
-                    alpha = alpha_new;
+                
+                alpha_new = interpolation(i)
+                   
+                
+                
+                % Quadratic interpolation
+                   alpha_1 = quadInterpolation(alpha_0);
+
+                    if isValid(alpha_1)
+                    alpha = alpha_1;
                     break
-                else
                     
-                    % Cubic interpolation
+                    else
+                        % Cubic interpolation
+                        alpha_2 = cubicInterpolation(alpha_0,alpha_1);
+                        
                     
-                end
-                    alpha_new = 
+                    
+                    end
+    
+    
             end
+            
     end
     
+    function alpha_new = interpolation(i)
+        switch i
+            case 0
+                alpha_new = quadInterpolation(alpha_store(1));
+                alpha_store(2) = alpha_new;
+            case 1
+                alpha_new = cubicInterpolation(alpha_store(1),alpha_store(2));
+                alpha_store(3) = alpha_new
+            otherwise
+                alpha(
+                
    
-    function out = merit_D(A,q,f_supp,pen,p) 
+    function out = merit_D(A,q,f_supp) 
         out = grad_f(A,q,f_supp)'*p - pen*abs(c(q,f_supp));
     end
 
@@ -184,15 +201,17 @@ function optimal = ProjectTandoori()
         else res = 1;
         end
     end
-    
-    function alpha_new = quadInterpol(alpha)
-    alpha_new = - merit_D(A,q,f_supp,pen,p)*alpha^2/(2*(merit(A + alpha*p(1),q + alpha*p(2),f_supp + aplha*p(3),pen) - merit(A,q,f_supp,pen) - merit_D(A,q,f_supp,pen,p)*alpha));
+
+    function alpha_new = quadInterpolation(alpha)
+        alpha_new = - merit_D(A,q,f_supp)*alpha^2/(2*(merit(A + alpha*p(1),q + alpha*p(2),f_supp + aplha*p(3)) - merit(A,q,f_supp) - merit_D(A,q,f_supp)*alpha));
     end
 
-
-
+    function alpha_new = cubicInterpolation(alpha_0,alpha_1)
+        coeff = 1/(alpha_0^2*alpha_1^2*(alpha_1-alpha_0))*[alpha_0^2 -alpha_1^2; -alpha_0^3 alpha_1^3]*...
+            [(merit(A + alpha_1*p(1),q + alpha_1*p(2),f_supp + aplha_1*p(3)) - merit(A,q,f_supp) - merit_D(A,q,f_supp)*alpha_1); (merit(A + alpha_0*p(1),q + alpha_0*p(2),f_supp + aplha_0*p(3)) - merit(A,q,f_supp) - merit_D(A,q,f_supp)*alpha_0)];
+        alpha_new = (-coeff(2) + sqrt(coeff(2)^2 - 3*coeff(1)*merit_D(A,q,f_supp)))/(3*coeff(1));
+    end
 end
- 
           
           
           
