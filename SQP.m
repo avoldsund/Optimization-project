@@ -88,40 +88,58 @@ end
 
 
 % D-matrix
-D = zeros(m,m);
-for j = 1:m
-    D(j,j) = l(j,3)/(E*A(j));
-end
+D = @(A) spdiags(l(j,3)./(E*A),0,m,m);
+%D = zeros(m,m);
+% for j = 1:m
+%     D(j,j) = l(j,3)/(E*A(j));
+% end
 
 
 
-A_sum = 0;
-for j = 1:m
-    A_sum = A_sum + (A(j)-A_bottom)*(A_top-A(j));
-end 
+A_sum = sum((A-A_bottom).*(A_top-A));
 
 % Function evaluated at q, A:
-f = 0.5 * q'*D*q - mu*log(M - rho*l(:,3)'*A) - mu*A_sum;
+f = @(A,q) 0.5 * q'*D(A)*q - mu*log(M - rho*l(:,3)'*A) - mu*A_sum;
 
-A_inv = zeros(m,1);
-for j = 1:m
-    A_inv(j) = 1/(A(j));
-end
+A_inv = 1./A;
 
 
 % Calculation of gradient of f, dim 2m + 3ns:
-grad_f_A = -0.5*D*q.*q.*A_inv.*A_inv;
-grad_f_q = D*q;
+grad_f_A = @(A,q) -0.5*D(A)*(q.^2./A.^2) - (mu/(M-sum(rho*l(:,3).*A)))*rho*l(:,3)-mu*(2*A+A_bottom+A_top)./((A-A_bottom).*(A_top-A));
+grad_f_q = @(A,q) D(A)*q;
 grad_f_fsupp = zeros(3*ns,1);
 
-grad_f = [grad_f_A; grad_f_q; grad_f_fsupp];
+grad_f = @(A,q) [grad_f_A(A,q); grad_f_q(A,q); grad_f_fsupp];
 
 
 
 % Constraint
-constraint = @(q, f_supp) B*q - I_supp*f_supp - I_ext*f_ext;
-c = constraint(q, f_supp);
+c = @(q, f_supp) B*q - I_supp*f_supp - I_ext*f_ext;
 
 % Jacobian matrix of the constraints (called A(x) in algorithm):
 grad_c = [zeros(3*n, m), B, -I_supp];
+
+
+% Calculation of Hessian-components
+hess_f_AA = @(A,q) 1/4 *spdiags(D(A)*(q.^2./A.^3),0,m,m) - (mu/(M-sum(rho*l(:,3).*A))^2)*rho^2*l(:,3)*l(:,3)' + mu*(spdiags((1./(A-A_bottom).^2)+(1./(A_top-A).^2),0,m,m));
+hess_f_qA = @(A,q) -spdiags(D(A)*(q/A.^2),0,m,m);
+hess_f_fsuppA = zeros(m,3*ns);
+
+hess_f_Aq = @(A,q) hess_f_qA(A,q)';
+hess_f_qq = @(A,q) D(A);
+hess_f_fsuppq = zeros(m,3*ns);
+
+hess_f_Afsupp = hess_f_fsuppA';
+hess_f_qfsupp = hess_f_fsuppq';
+hess_f_fsuppfsupp = zeros(3*ns,3*ns);
+
+hess_f = @(A,q) [hess_f_AA(A,q) hess_f_qA(A,q) hess_f_fsuppA;
+    hess_f_Aq(A,q) hess_f_qq(A,q) hess_f_fsuppq;
+    hess_f_Afsupp hess_f_qfsupp hess_f_fsuppfsupp];
+
+
+newton = @(A,q) [hess_f(A,q) -grad_c;
+    grad_c zeros(3*ns+2*m)];
+
+s = @(A,q,fsupp) [-grad_f(A,q); -c(q,fsupp)];
 
