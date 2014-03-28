@@ -1,0 +1,14 @@
+To show that the problem \eqref{eq:system5} admits at least one solution, we use Theorem 2 in \cite{optThe}.
+
+Since $\Omega$ is non-empty, we must also show that it is closed. From \cite{hyper} we know that if the function is continuous, the hyperplane is closed. As we have already stated, our function $g(\bm{q},\bm{f}^{\textrm{supp}})$ is continuous. Hence $\Omega$ is both non-empty and closed.
+
+Proving that $g(\bm{q},\bm{f}^{\textrm{supp}})$ is coercive, can be shown in this way,
+
+\begin{equation}
+\lim_{\vectornorm{\bm{q}}\to\infty} \frac{1}{2}\sum_{j=1}^{m}\frac{\ell_{j}q_{j}^{2}}{E_{j}A_{j}} > 
+\lim_{\vectornorm{\bm{q}}\to\infty} \max_{1 \leq \textrm{j} \leq \textrm{m}} \frac{\ell_{\textrm{j}}\vectornorm{{q_{\textrm{j}}}}^{2}}{E_{\textrm{j}}A_{\textrm{j}}} \rightarrow \infty.
+\end{equation}
+
+The requirement that $g(\bm{q},\bm{f}^{\textrm{supp}})$ must be a lower semi-continuous function holds as all continuous functions are both lower- and upper semi-continuous. Hence from Theorem 2, we know that \eqref{eq:system5} admits at least one global minimum.
+
+To conclude that \eqref{eq:system4} admits at least one solution under these assumptions we use the fact that \eqref{eq:system5} has a solution. Since we know that \eqref{eq:system4} is the optimal solution to \eqref{eq:system5}, we then know that \eqref{eq:system4} has at least one solution.
