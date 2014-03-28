@@ -6,7 +6,7 @@ M = 10; mu = 10^-4;
 A_top = 1; A_bottom = 10^-4; 
 
 
-problem = input('1 = Tower, 2 = Cantilever, 3 = Bridge');
+problem = input('1 = Tower, 2 = Cantilever, 3 = Bridge\n');
 
 switch problem
     case 1
@@ -102,4 +102,6 @@ switch problem
         grad_f_fsupp = zeros(3*ns,1);
 
         grad_f = @(A,q) [grad_f_A(A,q); grad_f_q(A,q); grad_f_fsupp];
+        
+        
 end

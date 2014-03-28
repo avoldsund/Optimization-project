@@ -6,7 +6,7 @@ M = 10; mu = 10^-4;
 A_top = 1; A_bottom = 10^-4; 
 
 
-problem = input('1 = Tower, 2 = Cantilever, 3 = Bridge');
+problem = input('1 = Tower, 2 = Cantilever, 3 = Bridge\n');
 
 switch problem
     case 1
@@ -15,7 +15,7 @@ switch problem
         ns = 4;     % number of fixed nodes (z = 0)
 
         % initial values:
-        A = ones(m,1);
+        A = 0.8*ones(m,1);
         q = ones(m,1);
         f_supp = ones(3*ns,1);
 
@@ -97,8 +97,27 @@ switch problem
 
 
         % Calculation of gradient of f, dim 2m + 3ns:
-        grad_f_A = @(A,q) -0.5*D(A)*(q.^2./A.^2) - (mu/(M-sum(rho*l(3,:).*A)))*rho*l(3,:)-mu*(2*A+A_bottom+A_top)./((A-A_bottom).*(A_top-A));
+        grad_f_A = @(A,q) -0.5*D(A)*(q.^2./A.^2) - (mu/(M-sum(rho*l(:,3).*A)))*rho*l(:,3)-mu*(2*A+A_bottom+A_top)./((A-A_bottom).*(A_top-A));
         grad_f_q = @(A,q) D(A)*q;
         grad_f_fsupp = zeros(3*ns,1);
 
         grad_f = @(A,q) [grad_f_A(A,q); grad_f_q(A,q); grad_f_fsupp];
+        
+        % Calculation of Hessian-components
+        hess_f_AA = @(A,q) 1/4 *spdiags(D(A)*(q.^2./A.^3),0,m,m) - (mu/(M-sum(rho*l(:,3).*A))^2)*rho^2*l(:,3)*l(:,3)' + mu*(spdiags((1./(A-A_bottom).^2)+(1./(A_top-A).^2),0,m,m));
+        hess_f_qA = @(A,q) -spdiags(D(A)*(q/A.^2),0,m,m);
+        hess_f_fsuppA = zeros(m,3*ns);
+        
+        hess_f_Aq = @(A,q) hess_f_qA(A,q)';
+        hess_f_qq = @(A,q) D(A);
+        hess_f_fsuppq = zeros(m,3*ns);
+        
+        hess_f_Afsupp = hess_f_fsuppA';
+        hess_f_qfsupp = hess_f_fsuppq';
+        hess_f_fsuppfsupp = zeros(3*ns,3*ns);
+        
+        hess_f = @(A,q) [hess_f_AA(A,q) hess_f_qA(A,q) hess_f_fsuppA;
+                        hess_f_Aq(A,q) hess_f_qq(A,q) hess_f_fsuppq;
+                        hess_f_Afsupp hess_f_qfsupp hess_f_fsuppfsupp];
+        
+end
