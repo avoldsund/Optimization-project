@@ -39,11 +39,14 @@ switch problem
 
 
         % Force on each node
-        force = zeros(3*n,1);
-        f_ext = zeros(3*(n-ns),1);
+        f_ext = spalloc(3 * (n - ns), 1, 0);
         % only non-zero ext load: top node [0.5, 0.5, 2.5] which is node n
-        f_ext(end-2:end) = [0; 0; -1];
+        f_ext(end-2 : end) = [0; 0; -1];
 
+        I_supp = [speye(3 * ns); spalloc(3 * (n - ns), 3 * ns, 0)];
+        I_ext = [spalloc(3 * ns, 3 * (n - ns), 0); speye(3 * (n - ns))];
+
+        force = I_supp * f_supp + I_ext * f_ext;
 
 
         % Length of bars [first node, second node, lenght]
@@ -118,12 +121,32 @@ switch problem
                         hess_f_Afsupp hess_f_qfsupp hess_f_fsuppfsupp];
                     
         % Constraint
-        constraint = @(q, f_supp) B*q - I_supp*f_supp - I_ext*f_ext;
+        c = @(q, f_supp) B*q - I_supp*f_supp - I_ext*f_ext;
         
         % Jacobian matrix of the constraints:
         grad_c = [zeros(3*n, m), B, -I_supp];
                     
         
         newton = @(A,q) [hess_f(A,q) -grad_c;
-                        grad_c ];
+                        grad_c zeros(3*ns+2*m)];
+                    
+        s = @(A,q,f_supp) [-grad_f(A,q); -c(q,f_supp)];
+        
+        k = 0.5;
+        
+        
+        merit = @(A,q,f_supp,k) f(A,q) + k*abs(c(q,f_supp));
+        
+        dir_D = @(A,q,f_supp,k,p) grad_f(A,q,f_supp)'*p - k*abs(c(q,f_supp));
+        
+        alpha = 0.5;
+        
+        while merit(A + alpha(1)*p(1),q + aplha(2)*p(2),f_supp + aplha(3)*p(3),k) <= merit(A,q,f_supp,k) + nu*aplha*dir_D(A,q,f_supp,k,p)
+            
+            
+            
+            
+        end
+        
+        
 end
