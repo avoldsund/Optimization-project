@@ -94,42 +94,54 @@ grad_c = [spalloc(m, 3*n, 0); B'; -I_supp'];
     end
 
 % -----------------------------------------------
+
+% Function for norm of KKT conditions
+    function tol = convergence(A, q, f_supp)
+        
+        % KKT conditions must be close to zero for convergence
+        tol1 = hess_L(A,q)*p + grad_f(A,q) - grad_c*l;
+        tol2 = grad_c'*p + c(q, f_supp);
+        tol = norm(tol1) + norm(tol2);
+    end
+
 % ALGORITHM
 
 
-% (18.9) newton: matrix, s: right-hand side, sol: solution
-sol = solve_newton(A, q, f_supp);
 
-% step length and lagrange multiplier from (18.9):
-p = sol(1:2*m+3*ns);
-lambda_hat = sol(2*m+3*ns+1:end);
+while convergence(A, q, f_supp) < 10^-4
 
-p_lambda = lambda_hat - lambda;
+    % Compute p by solving (18.9)
+    % newton: matrix, s: right-hand side, sol: solution
+    sol = solve_newton(A, q, f_supp);
+    p = sol(1:2*m+3*ns);
+    lambda_hat = sol(2*m+3*ns+1:end);
+
+    p_lambda = lambda_hat - lambda;
+
+    % Choose penalty parameter to satisfy (18.36) with sigma evaluated:
+    pen = 0.5;
+    % Parameter in (0,1)
+    par = 0.5;
+
+    % Sigma, determines if Hessian of L is pos. def.
+    if all(eigs(hess_L(A,q))) > 0
+        sigma = 1;
+    else
+        sigma = 0;
+    end
+
+    % Penalty parameter must satisfy (18.36):
+    while pen*1.01 < (grad_f(A,q)'*p + sigma/2*p'*hess_L(A,q)*p)/((1-par)*norm(c(q, f_supp),1))
+        pen = pen*1.2;
+    end
+    
+
+    merit_D = @(A,q,f_supp,k) f(A,q) + k*abs(c(q,f_supp));
+    dir_D = @(A,q,f_supp,k,p) grad_f(A,q,f_supp)'*p - k*abs(c(q,f_supp));
+    alpha = 1;
 
 
-% Penalty Parameter (mu in book)
-pen = 0.5;
-% Parameter in (0,1)
-par = 0.5;
-
-% Sigma, determines if Hessian of L is pos. def.
-if all(eigs(hess_L(A,q))) > 0
-    sigma = 1;
-else
-    sigma = 0;
 end
-
-while pen*1.01 < (grad_f(A,q)'*p + sigma/2*p'*hess_L(A,q)*p)/((1-par)*norm(c(q, f_supp),1))
-    pen = pen*1.2;
-end
-
-
-merit_D = @(A,q,f_supp,k) f(A,q) + k*abs(c(q,f_supp));
-dir_D = @(A,q,f_supp,k,p) grad_f(A,q,f_supp)'*p - k*abs(c(q,f_supp));
-alpha = 1;
-
-
-
 
 
 
@@ -195,4 +207,16 @@ newton = [hess_L(A,q) -grad_c; grad_c' zeros(3*n)];
 s = [-grad_f(A,q); -c(q,fsupp)];
 sol = newton(A,q) \ s(A,q,f_supp);
 end
+
+
+
+
+
+
+
+
+
+
+
+
 
