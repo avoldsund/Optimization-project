@@ -117,8 +117,7 @@ grad_f = @(A,q) [grad_f_A(A,q); grad_f_q(A,q); grad_f_fsupp];
 c = @(q, f_supp) B*q - I_supp*f_supp - I_ext*f_ext;
 
 % Jacobian matrix of the constraints (called A(x) in algorithm):
-grad_c = [zeros(3*n, m), B, -I_supp];
-
+grad_c = [zeros(m, 3*n); B'; -I_supp'];
 
 % Calculation of Hessian-components
 hess_f_AA = @(A,q) 1/4 *spdiags(D(A)*(q.^2./A.^3),0,m,m) - (mu/(M-sum(rho*l(:,3).*A))^2)*rho^2*l(:,3)*l(:,3)' + mu*(spdiags((1./(A-A_bottom).^2)+(1./(A_top-A).^2),0,m,m));
@@ -138,8 +137,14 @@ hess_f = @(A,q) [hess_f_AA(A,q) hess_f_qA(A,q) hess_f_fsuppA;
     hess_f_Afsupp hess_f_qfsupp hess_f_fsuppfsupp];
 
 
-newton = @(A,q) [hess_f(A,q) -grad_c;
-    grad_c zeros(3*ns+2*m)];
 
+% Matrix in (18.9)
+newton = @(A,q) [hess_f(A,q) -grad_c;
+    grad_c' zeros(3*n)];
+
+% Solution in (18.9)
 s = @(A,q,fsupp) [-grad_f(A,q); -c(q,fsupp)];
 
+
+
+newt = newton(A,q) \ s(A,q,f_supp);
