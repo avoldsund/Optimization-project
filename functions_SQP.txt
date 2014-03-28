@@ -1,0 +1,29 @@
+% Functions in SQP.m
+
+function gradient_f = grad_f(A,q)
+
+function hessian = hess_L(A, q)
+
+function v = generate_v(v,x,y,z)
+
+function l = generate_l(l, v, n)
+
+function tau = generate_tau(tau,m,v,l)
+
+function B = generate_B(B, n, m, tau, l)
+
+D = @(A) spdiags(l(:,3)./(E*A),0,m,m);
+
+A_sum = @(A) sum(log((A-A_bottom).*(A_top-A)));
+
+f = @(A,q) 0.5 * q'*D(A)*q - mu*log(M - rho*l(:,3)'*A) - mu*A_sum(A);
+
+c = @(q, f_supp) B*q - I_supp*f_supp - I_ext*f_ext;
+
+newton = @(A,q) [hess_L(A,q) -grad_c; grad_c' zeros(3*n)];
+
+s = @(A,q,fsupp) [-grad_f(A,q); -c(q,fsupp)];
+
+merit_D = @(A,q,f_supp,k) f(A,q) + k*abs(c(q,f_supp));
+
+dir_D = @(A,q,f_supp,k,p) grad_f(A,q,f_supp)'*p - k*abs(c(q,f_supp));
