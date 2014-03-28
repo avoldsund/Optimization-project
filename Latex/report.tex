@@ -18,13 +18,13 @@
 A truss is a mechanical structure constructed of straight elastic members connected at joints. In this project we have used optimization theory to maximize the stiffness of the structure.
 \end{abstract}
 
-\subsection*{Equations for question 1-3}
+\subsection*{Equations for questions 1-3}
 
 \begin{equation}
  \begin{aligned}
  \label{eq:system5}
  & \underset{(\bm{q},\bm{f}^{\textrm{supp}})}{\text{minimize}}
- & & \frac{1}{2}\sum_{j=1}^{m}\frac{\ell_{j}q_{j}^{2}}{E_{j}A_{j}} = g(\bm{q},\bm{f}^{\textrm{supp}}) \\
+ & & \frac{1}{2}\sum_{j=1}^{m}\frac{\ell_{j}q_{j}^{2}}{E_{j}A_{j}} = g(\bm{q}) \\
  & \text{subject to}
  & & \bm{Bq} = \bm{I}_{\textrm{supp}}\bm{f}^{\textrm{supp}} + \bm{I}_{\textrm{ext}}\bm{f}^{\textrm{ext}}
  \end{aligned}
@@ -52,7 +52,30 @@ A truss is a mechanical structure constructed of straight elastic members connec
 \input{question3}
 
 
-%\subsection*{Question 4}
+\subsection*{Equations for questions 4-6}
+
+\begin{equation}
+ \begin{aligned}
+ \label{eq:system6}
+ & \underset{(\bm{A},\bm{q},\bm{f}^{\textrm{supp}})}{\text{minimize}}
+ & & \frac{1}{2}\sum_{j=1}^{m}\frac{\ell_{j}q_{j}^{2}}{E_{j}A_{j}} = g(\bm{A}, \bm{q}), \\
+ & \text{subject to}
+ & & \bm{Bq} = \bm{I}_{\textrm{supp}}\bm{f}^{\textrm{supp}} + \bm{I}_{\textrm{ext}}\bm{f}^{\textrm{ext}},\\
+ & & & \sum_{j=1}^{m}{\rho_{j}\ell_{j}A{j}} \leq M,\\
+ & & & \underline{A}_{j} \leq A_{j} \leq \overline{A}_{j}, \hspace{10 mm}  j = 1,...,m.
+ \end{aligned}
+\end{equation}
+
+
+
+
+
+
+
+
+\subsection*{Question 4}
+\input{question4}
+
 
 %\subsection*{Question 5}
 
@@ -67,7 +90,7 @@ A truss is a mechanical structure constructed of straight elastic members connec
 Jorge Nocedal, Stephen J. Wright, \emph{Numerical Optimization}, 2nd Edition, 2006.
 \bibitem{optThe}
 Anton Evgrafov, \emph{Optimization Theory} 
-\bibitem{intoxicate}
+\bibitem{intOptCon}
 Anton Evgrafov, \emph{Introduction to optimality conditions}
 \bibitem{hyper}
 California Institute of Technology, \emph{Separating Hyperplane Theorems} http://www.hss.caltech.edu/$\sim$kcb/Notes/SeparatingHyperplane.pdf, 28. March 2014
