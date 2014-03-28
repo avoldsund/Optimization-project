@@ -15,7 +15,7 @@ switch problem
         ns = 4;     % number of fixed nodes (z = 0)
 
         % initial values:
-        A = 0.8*ones(m,1);
+        A = ones(m,1);
         q = ones(m,1);
         f_supp = ones(3*ns,1);
 
@@ -97,9 +97,8 @@ switch problem
 
 
         % Calculation of gradient of f, dim 2m + 3ns:
-        grad_f_A = @(A,q) -0.5*D(A)*(q.^2./A.^2) - (mu/(M-sum(rho*l(:,3).*A)))*rho*l(:,3)-mu*(2*A+A_bottom+A_top)./((A-A_bottom).*(A_top-A));
+        grad_f_A = @(A,q) -0.5*D(A)*(q.^2./A.^2) - (mu/(M-sum(rho*l(3,:).*A)))*rho*l(3,:)-mu*(2*A+A_bottom+A_top)./((A-A_bottom).*(A_top-A));
         grad_f_q = @(A,q) D(A)*q;
         grad_f_fsupp = zeros(3*ns,1);
 
         grad_f = @(A,q) [grad_f_A(A,q); grad_f_q(A,q); grad_f_fsupp];
-end
