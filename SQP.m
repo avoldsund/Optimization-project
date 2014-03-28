@@ -118,3 +118,10 @@ grad_f = [grad_f_A; grad_f_q; grad_f_fsupp];
 
 
 
+% Constraint
+constraint = @(q, f_supp) B*q - I_supp*f_supp - I_ext*f_ext;
+c = constraint(q, f_supp);
+
+% Jacobian matrix of the constraints:
+A = [zeros(3*n, m), B, -I_supp];
+
