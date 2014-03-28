@@ -127,10 +127,64 @@ end
         end
 
 
-        merit_D = @(A,q,f_supp,k) f(A,q) + k*abs(c(q,f_supp));
-        dir_D = @(A,q,f_supp,k,p) grad_f(A,q,f_supp)'*p - k*abs(c(q,f_supp));
         alpha = 1;
+        
+        i = 1;
+            
+        alpha_store(1) = alpha;
+        
+        while (M-sum(rho*l.*A)) > 0 && ~(find((A-A_bottom).*(A_top-A) < 0 && ~isValid(alpha_store(i))
+                
+                
+            alpha_new = interpolation(i);
+                
+            i = i + 1;
+        end
+            
+            alpha = alpha_new;
+        
+        
 
+    end
+    
+    
+    
+    
+        function alpha_new = interpolation(i)
+        switch i
+            case 1
+                alpha_new = quadInterpolation(alpha_store(1));
+                alpha_store(2) = alpha_new;
+            otherwise 
+                alpha_new = cubicInterpolation(alpha_store(i-1),alpha_store(i));
+                alpha_store(i+1) = alpha_new;
+        end
+    end
+                
+   
+    function out = merit_D(A,q,f_supp) 
+        out = grad_f(A,q,f_supp)'*p - pen*abs(c(q,f_supp));
+    end
+
+    function out = merit(A,q,f_supp)
+        out = f(A,q) + pen*abs(c(q,f_supp));
+    end
+
+    function res = isValid(alpha)
+        if merit(A + alpha*p(1),q + alpha*p(2),f_supp + alpha*p(3),pen) > merit(A,q,f_supp,pen) + eta*alpha*merit_D(A,q,f_supp,pen,p)
+            res = 0;
+        else res = 1;
+        end
+    end
+
+    function alpha_new = quadInterpolation(alpha)
+        alpha_new = - merit_D(A,q,f_supp)*alpha^2/(2*(merit(A + alpha*p(1),q + alpha*p(2),f_supp + aplha*p(3)) - merit(A,q,f_supp) - merit_D(A,q,f_supp)*alpha));
+    end
+
+    function alpha_new = cubicInterpolation(alpha_0,alpha_1)
+        coeff = 1/(alpha_0^2*alpha_1^2*(alpha_1-alpha_0))*[alpha_0^2 -alpha_1^2; -alpha_0^3 alpha_1^3]*...
+            [(merit(A + alpha_1*p(1),q + alpha_1*p(2),f_supp + aplha_1*p(3)) - merit(A,q,f_supp) - merit_D(A,q,f_supp)*alpha_1); (merit(A + alpha_0*p(1),q + alpha_0*p(2),f_supp + aplha_0*p(3)) - merit(A,q,f_supp) - merit_D(A,q,f_supp)*alpha_0)];
+        alpha_new = (-coeff(2) + sqrt(coeff(2)^2 - 3*coeff(1)*merit_D(A,q,f_supp)))/(3*coeff(1));
     end
 
 
