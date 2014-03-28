@@ -122,6 +122,6 @@ grad_f = [grad_f_A; grad_f_q; grad_f_fsupp];
 constraint = @(q, f_supp) B*q - I_supp*f_supp - I_ext*f_ext;
 c = constraint(q, f_supp);
 
-% Jacobian matrix of the constraints:
-A = [zeros(3*n, m), B, -I_supp];
+% Jacobian matrix of the constraints (called A(x) in algorithm):
+grad_c = [zeros(3*n, m), B, -I_supp];
 
