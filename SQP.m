@@ -36,12 +36,16 @@ end
 v(:,end) = [0.5; 0.5; 2.5];
 
 
-
+ 
 % Force on each node
-force = zeros(3*n,1);
-f_ext = zeros(3*(n-ns),1);
+f_ext = spalloc(3 * (n - ns), 1, 0);
 % only non-zero ext load: top node [0.5, 0.5, 2.5] which is node n
-f_ext(end-2:end) = [0; 0; -1];
+f_ext(end-2 : end) = [0; 0; -1];
+
+I_supp = [speye(3 * ns); spalloc(3 * (n - ns), 3 * ns, 0)];
+I_ext = [spalloc(3 * ns, 3 * (n - ns), 0); speye(3 * (n - ns))];
+
+force = I_supp * f_supp + I_ext * f_ext;
 
 
 
