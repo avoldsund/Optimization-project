@@ -41,18 +41,16 @@ I_ext = [spalloc(3 * ns, 3 * (n - ns), 0); speye(3 * (n - ns))];
 
 
 % Length of bars [first node, second node, lenght]
-l = zeros(m,3);     
-l = generate_l(l, v, n);
+    
+l = generate_l(v, m, n);
 
 
 % Tau, vector of the bar's directional cosines:
-tau = zeros(3,m);
-tau = generate_tau(tau,m,v,l);
+tau = generate_tau(m,v,l);
 
 
 % B-matrix:
-B = spalloc(3*n, m, 0);
-B = generate_B(B, n, m, tau, l);
+B = generate_B(n, m, tau, l);
 
 
 % D-matrix as function of A
@@ -105,11 +103,7 @@ grad_c = [spalloc(m, 3*n, 0); B'; -I_supp'];
 
 
 % (18.9) newton: matrix, s: right-hand side, sol: solution
-newton = @(A,q) [hess_L(A,q) -grad_c; grad_c' zeros(3*n)];
-s = @(A,q,fsupp) [-grad_f(A,q); -c(q,fsupp)];
-
-sol = newton(A,q) \ s(A,q,f_supp);
-
+sol = solve_newton(A, q, f_supp);
 
 % step length and lagrange multiplier from (18.9):
 p = sol(1:2*m+3*ns);
@@ -139,6 +133,12 @@ merit_D = @(A,q,f_supp,k) f(A,q) + k*abs(c(q,f_supp));
 dir_D = @(A,q,f_supp,k,p) grad_f(A,q,f_supp)'*p - k*abs(c(q,f_supp));
 alpha = 1;
 
+
+
+
+
+
+
 end
 
 %%
@@ -156,7 +156,8 @@ end
 
 
 %%
-function l = generate_l(l, v, n)
+function l = generate_l(v, m, n)
+l = zeros(m,3); 
 it = 1;
 for i = 1:n
     for j = i:n
@@ -169,23 +170,18 @@ end
 end
 
 %%
-function tau = generate_tau(tau,m,v,l)
+function tau = generate_tau(m,v,l)
+tau = zeros(3,m);
 for j = 1:m
     tau(:,j) = (v(:,l(j,1))-v(:,l(j,2)))/l(j,3);
 end
 end
 
-%%
-function B = generate_B(B, n, m, tau, l)
-for i = 1:n
-    for j = 1:m
-        for k = 1:3
-            if l(j,1) == i
-                B(3*(i-1)+k, j) = -tau(k,j);     
-            elseif l(j,2) == i
-                B(3*(i-1)+k, j) = tau(k,j);
-            end
-        end
-    end
+
+%%    
+function sol = solve_newton(A,q,f_supp)
+newton = [hess_L(A,q) -grad_c; grad_c' zeros(3*n)];
+s = [-grad_f(A,q); -c(q,fsupp)];
+sol = newton(A,q) \ s(A,q,f_supp);
 end
-end
+

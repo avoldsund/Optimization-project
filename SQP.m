@@ -30,6 +30,14 @@ v = zeros(3,n);
 v = generate_v(v,x,y,z);
 v(:,end) = [0.5; 0.5; 2.5];
 
+% Length of bars [first node, second node, lenght]
+l = generate_l(v, m, n);
+
+% Tau, vector of the bar's directional cosines:
+tau = generate_tau(m,v,l);
+
+% B-matrix:
+B = generate_B(n, m, tau, l);
  
 % Force on each node
 f_ext = spalloc(3 * (n - ns), 1, 0);
@@ -40,19 +48,6 @@ I_supp = [speye(3 * ns); spalloc(3 * (n - ns), 3 * ns, 0)];
 I_ext = [spalloc(3 * ns, 3 * (n - ns), 0); speye(3 * (n - ns))];
 
 
-% Length of bars [first node, second node, lenght]
-l = zeros(m,3);     
-l = generate_l(l, v, n);
-
-
-% Tau, vector of the bar's directional cosines:
-tau = zeros(3,m);
-tau = generate_tau(tau,m,v,l);
-
-
-% B-matrix:
-B = spalloc(3*n, m, 0);
-B = generate_B(B, n, m, tau, l);
 
 
 % D-matrix as function of A
@@ -64,16 +59,15 @@ A_sum = @(A) sum(log((A-A_bottom).*(A_top-A)));
 % Function evaluated at q, A:
 f = @(A,q) 0.5 * q'*D(A)*q - mu*log(M - rho*l(:,3)'*A) - mu*A_sum(A);
 
-A_inv = 1./A;
-
 
 % Calculation of gradient of f, dim 2m + 3ns:
     function gradient_f = grad_f(A,q)
-    grad_f_A = -0.5*D(A)*(q.^2./A.^2) - (mu/(M-sum(rho*l(:,3).*A)))*rho*l(:,3)-mu*(2*A+A_bottom+A_top)./((A-A_bottom).*(A_top-A));
-    grad_f_q = D(A)*q;
-    grad_f_fsupp = zeros(3*ns,1);
-    gradient_f = [grad_f_A; grad_f_q; grad_f_fsupp];
+        grad_f_A = -0.5*D(A)*(q.^2./A.^2) - (mu/(M-sum(rho*l(:,3).*A)))*rho*l(:,3)-mu*(2*A+A_bottom+A_top)./((A-A_bottom).*(A_top-A));
+        grad_f_q = D(A)*q;
+        grad_f_fsupp = zeros(3*ns,1);
+        gradient_f = [grad_f_A; grad_f_q; grad_f_fsupp];
     end
+
 % Constraint
 c = @(q, f_supp) B*q - I_supp*f_supp - I_ext*f_ext;
 
@@ -99,14 +93,12 @@ grad_c = [spalloc(m, 3*n, 0); B'; -I_supp'];
             hess_L_Afsupp hess_L_qfsupp hess_L_fsuppfsupp];
     end
 
+% -----------------------------------------------
+% ALGORITHM
+
 
 % (18.9) newton: matrix, s: right-hand side, sol: solution
-newton = @(A,q) [hess_L(A,q) -grad_c;
-    grad_c' zeros(3*n)];
-s = @(A,q,fsupp) [-grad_f(A,q); -c(q,fsupp)];
-
- sol = newton(A,q) \ s(A,q,f_supp);
-
+sol = solve_newton(A, q, f_supp);
 
 % step length and lagrange multiplier from (18.9):
 p = sol(1:2*m+3*ns);
@@ -136,6 +128,12 @@ merit_D = @(A,q,f_supp,k) f(A,q) + k*abs(c(q,f_supp));
 dir_D = @(A,q,f_supp,k,p) grad_f(A,q,f_supp)'*p - k*abs(c(q,f_supp));
 alpha = 1;
 
+
+
+
+
+
+
 end
 
 %%
@@ -153,7 +151,8 @@ end
 
 
 %%
-function l = generate_l(l, v, n)
+function l = generate_l(v, m, n)
+l = zeros(m,3); 
 it = 1;
 for i = 1:n
     for j = i:n
@@ -166,14 +165,17 @@ end
 end
 
 %%
-function tau = generate_tau(tau,m,v,l)
+function tau = generate_tau(m,v,l)
+tau = zeros(3,m);
 for j = 1:m
     tau(:,j) = (v(:,l(j,1))-v(:,l(j,2)))/l(j,3);
 end
 end
 
 %%
-function B = generate_B(B, n, m, tau, l)
+function B = generate_B(n, m, tau, l)
+
+B = spalloc(3*n, m, 0);
 for i = 1:n
     for j = 1:m
         for k = 1:3
@@ -186,3 +188,11 @@ for i = 1:n
     end
 end
 end
+
+%%    
+function sol = solve_newton(A,q,f_supp)
+newton = [hess_L(A,q) -grad_c; grad_c' zeros(3*n)];
+s = [-grad_f(A,q); -c(q,fsupp)];
+sol = newton(A,q) \ s(A,q,f_supp);
+end
+
