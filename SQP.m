@@ -1,4 +1,4 @@
-function SQP
+function SQP()
 
 rho = 1; E = 1; 
 M = 10; mu = 10^-4;
