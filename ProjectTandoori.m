@@ -148,15 +148,15 @@ function optimal = ProjectTandoori()
             
             alpha_store(1) = alpha;
             
-            while (M-sum(rho*l.*A)) > 0 && ~(find((A-A_bottom).*(A_top-A) < 0 && ~isValid(alpha_store(i))
+            while (M-sum(rho*l.*A)) > 0 && ~(find((A-A_bottom)*(A_top-A) < 0 && ~isValid(alpha_store(i))
                 
-                
+                % Step-length selection
                 alpha_new = interpolation(i);
                 
                 i = i + 1;
             end
             
-            alpha = alpa_new;
+            alpha = alpha_new;
     end
     
     function alpha_new = interpolation(i)
@@ -191,9 +191,12 @@ function optimal = ProjectTandoori()
     end
 
     function alpha_new = cubicInterpolation(alpha_0,alpha_1)
+        
         coeff = 1/(alpha_0^2*alpha_1^2*(alpha_1-alpha_0))*[alpha_0^2 -alpha_1^2; -alpha_0^3 alpha_1^3]*...
             [(merit(A + alpha_1*p(1),q + alpha_1*p(2),f_supp + aplha_1*p(3)) - merit(A,q,f_supp) - merit_D(A,q,f_supp)*alpha_1); (merit(A + alpha_0*p(1),q + alpha_0*p(2),f_supp + aplha_0*p(3)) - merit(A,q,f_supp) - merit_D(A,q,f_supp)*alpha_0)];
+        
         alpha_new = (-coeff(2) + sqrt(coeff(2)^2 - 3*coeff(1)*merit_D(A,q,f_supp)))/(3*coeff(1));
+        
     end
 end
           
