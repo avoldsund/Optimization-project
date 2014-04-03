@@ -156,7 +156,7 @@ function optimal = ProjectTandoori()
                 i = i + 1;
             end
             
-            alpha = alpa_new;
+            alpha = alpha_new;
     end
     
     function alpha_new = interpolation(i)
