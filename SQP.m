@@ -61,7 +61,8 @@ end
     c = @(q, f_supp) B*q - I_supp*f_supp - I_ext*f_ext;
 
     % Jacobian matrix of the constraints (called A(x) in algorithm):
-    grad_c = [spalloc(m, 3*n, 0); B'; -I_supp'];
+    grad_c = [zeros(3*n, m), B', -I_supp'];
+    size(grad_c)
 
     % Calculation of Hessian-components
         function hessian = hess_L(A, q)
@@ -88,8 +89,8 @@ end
         function tol = convergence(A, q, f_supp)
 
             % KKT conditions must be close to zero for convergence
-            tol1 = hess_L(A,q)*p + grad_f(A,q) - grad_c*l;
-            tol2 = grad_c'*p + c(q, f_supp);
+            tol1 = hess_L(A,q)*p + grad_f(A,q) - grad_c'*l(:,3);
+            tol2 = grad_c*p + c(q, f_supp);
             tol = norm(tol1) + norm(tol2);
         end
 
@@ -98,13 +99,21 @@ end
     % tau and eta in algorithm
     t = 0.5;
     eta = 0.25;
+    
+    p = zeros(2*m+3*ns,1);
+    
+    size(hess_L(A,q))
+    size(grad_f(A,q))
+    size(grad_c)
+    size(l(:,3))
 
-    while convergence(A, q, f_supp) < 10^-4
+    while convergence(A, q, f_supp) > 10^-4
 
         % Compute p by solving (18.9)
         % newton: matrix, s: right-hand side, sol: solution
         sol = solve_newton(A, q, f_supp);
         p = sol(1:2*m+3*ns);
+        
         lambda_hat = sol(2*m+3*ns+1:end);
 
         p_lambda = lambda_hat - lambda;
@@ -126,31 +135,35 @@ end
             pen = pen*1.2;
         end
 
-
         alpha = 1;
         
         i = 1;
             
         alpha_store(1) = alpha;
         
-        while (M-sum(rho*l.*A)) > 0 && ~(find((A-A_bottom).*(A_top-A) < 0 && ~isValid(alpha_store(i))
+        while ~isValid(alpha_store(i),eta) && (M-sum(rho*l.*(A+alpha*p(1:m)))) < 0 && ~(find((A-A_bottom)*(A_top-A) < 0))
                 
-                
-            alpha_new = interpolation(i);
+                [alpha_new alpha_store] = interpolation(i,alpha_store);
                 
             i = i + 1;
         end
             
             alpha = alpha_new;
-        
+            
+            A = A+alpha*p(1:m);
+            q = q + alpha*p(m+1:2*m);
+            f_supp = f_supp + alpha*p(2*m+1:end);
+            
+            lambda = lambda + alpha*p_lambda;
+            
+            
+    end
         
 
-    end
+end
     
     
-    
-    
-        function alpha_new = interpolation(i)
+    function [alpha_new alpha_store] = interpolation(i,alpha_store)
         switch i
             case 1
                 alpha_new = quadInterpolation(alpha_store(1));
@@ -170,28 +183,26 @@ end
         out = f(A,q) + pen*abs(c(q,f_supp));
     end
 
-    function res = isValid(alpha)
-        if merit(A + alpha*p(1),q + alpha*p(2),f_supp + alpha*p(3),pen) > merit(A,q,f_supp,pen) + eta*alpha*merit_D(A,q,f_supp,pen,p)
+    function res = isValid(alpha,eta)
+        if merit(A + alpha*p(1:m),q + alpha*p(m+1:2*m),f_supp + ...
+                alpha*p(2*m+1:3*ns),pen) > merit(A,q,f_supp,pen) + eta*alpha*merit_D(A,q,f_supp,pen,p)
             res = 0;
         else res = 1;
         end
     end
 
     function alpha_new = quadInterpolation(alpha)
-        alpha_new = - merit_D(A,q,f_supp)*alpha^2/(2*(merit(A + alpha*p(1),q + alpha*p(2),f_supp + aplha*p(3)) - merit(A,q,f_supp) - merit_D(A,q,f_supp)*alpha));
+        alpha_new = - merit_D(A,q,f_supp)*alpha^2/(2*(merit(A + alpha*p(1:m),q + alpha*p(m+1:2*m),f_supp + aplha*p(2*m+1:2*ns))...
+            - merit(A,q,f_supp) - merit_D(A,q,f_supp)*alpha));
     end
 
     function alpha_new = cubicInterpolation(alpha_0,alpha_1)
         coeff = 1/(alpha_0^2*alpha_1^2*(alpha_1-alpha_0))*[alpha_0^2 -alpha_1^2; -alpha_0^3 alpha_1^3]*...
-            [(merit(A + alpha_1*p(1),q + alpha_1*p(2),f_supp + aplha_1*p(3)) - merit(A,q,f_supp) - merit_D(A,q,f_supp)*alpha_1); (merit(A + alpha_0*p(1),q + alpha_0*p(2),f_supp + aplha_0*p(3)) - merit(A,q,f_supp) - merit_D(A,q,f_supp)*alpha_0)];
+            [(merit(A + alpha_1*p(1:m),q + alpha_1*p(m+1:2*m),f_supp + aplha_1*p(2*m+1:end)) - merit(A,q,f_supp) - merit_D(A,q,f_supp)*alpha_1); (merit(A + alpha_0*p(1:m),q + alpha_0*p(m+1:2*m),f_supp + aplha_0*p(2*m+1:end)) - merit(A,q,f_supp) - merit_D(A,q,f_supp)*alpha_0)];
         alpha_new = (-coeff(2) + sqrt(coeff(2)^2 - 3*coeff(1)*merit_D(A,q,f_supp)))/(3*coeff(1));
     end
 
 
-
-
-
-end
 
 %%
 function v = generate_v(v,x,y,z)
@@ -264,7 +275,7 @@ end
 
 %%    
 function sol = solve_newton(A,q,f_supp)
-newton = [hess_L(A,q) -grad_c; grad_c' zeros(3*n)];
+newton = [hess_L(A,q) -grad_c'; grad_c zeros(3*n)];
 s = [-grad_f(A,q); -c(q,fsupp)];
 sol = newton(A,q) \ s(A,q,f_supp);
 end
