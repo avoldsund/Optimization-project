@@ -1,4 +1,4 @@
-function [A, q, f_supp, energy] = SQP()
+function [A, q, f_supp, energy, time] = SQP()
 
 global rho E M mu A_top A_bottom
 global m n ns v l B I_supp I_ext f_ext lambda forc
@@ -28,7 +28,7 @@ switch problem
         dist = sqrt(3);
         
         % initial values:
-        A = 0.12*ones(m,1);
+        A = 0.01*ones(m,1);
         q = 0.1*ones(m,1);
         f_supp = 10000*ones(3*ns,1);
         lambda = 10*ones(3*n,1);
@@ -62,7 +62,7 @@ switch problem
         dist = sqrt(3);
         
         % initial values:
-        A = 0.12*ones(m,1);
+        A = 0.01*ones(m,1);
         q = 0.1*ones(m,1);
         f_supp = 10000*ones(3*ns,1);
         lambda = 10*ones(3*n,1);
@@ -94,9 +94,9 @@ switch problem
         
         % initial values:
         A = 0.01*ones(m,1);
-        q = 10*ones(m,1);
-        f_supp = 1000*ones(3*ns,1);
-        lambda = 100*ones(3*n,1);
+        q = 0.1*ones(m,1);
+        f_supp = 10000*ones(3*ns,1);
+        lambda = 10*ones(3*n,1);
         
         %fixed nodes: node number 1, 5, 6 and 10
         
@@ -116,7 +116,9 @@ switch problem
 end
    
 % Run line search algorithm on the problem:
+tic
 [A, q, f_supp] = SQP_lineSearch(A, q, f_supp);
+time = toc;
 energy = f(A, q);
 % Plot the structure in 3 dimensions. 
 plot_structure(A)
@@ -134,7 +136,9 @@ end
     p = zeros(2*m+3*ns,1);
 
     % Run while KKT-conditions not yet satisfied:
-    while convergence(A, q, f_supp, lambda, p) > 0.001 && iter < 2000 
+    while convergence(A, q, f_supp, lambda, p) > 0.001 && iter < 5000 
+        
+        iter = iter + 1;
         
         % Compute p and lambda_hat by solving (18.9)
         sol = solve_newton(A, q, f_supp);
@@ -172,7 +176,7 @@ end
         while ~isValid(alpha_new,eta, A, q, f_supp) || (M-sum(rho*l(:,3).*(A+alpha_new*p(1:m)))) < 0 || ~isempty(find(((A+alpha_new*p(1:m))-A_bottom).*(A_top-(A+alpha_new*p(1:m))) < 0))
 
             % Use interpolation to find new step:
-%             [alpha_new alpha_store] = interpolation(i,alpha_store, A, q, f_supp); 
+%           [alpha_new alpha_store] = interpolation(i,alpha_store, A, q, f_supp); 
             % Reduce step length by a half
             alpha_new = alpha_new*0.5;
             
@@ -190,11 +194,9 @@ end
         q = q + alpha*p(m+1:2*m);
         f_supp = f_supp + alpha*p(2*m+1:2*m+3*ns);
 
-        lambda = lambda + alpha*p_lambda;
-            
+        lambda = lambda + alpha*p_lambda;   
             
     end
-    
   end
 
 
