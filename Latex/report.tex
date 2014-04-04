@@ -52,7 +52,7 @@ A truss is a mechanical structure constructed of straight elastic members connec
 \input{question3}
 
 
-\subsection*{Equations for questions 4-6}
+\subsection*{Equations for questions 4-5}
 
 \begin{equation}
  \begin{aligned}
@@ -68,11 +68,6 @@ A truss is a mechanical structure constructed of straight elastic members connec
 
 
 
-
-
-
-
-
 \subsection*{Question 4}
 \input{question4}
 
@@ -80,7 +75,20 @@ A truss is a mechanical structure constructed of straight elastic members connec
 \subsection*{Question 5}
 \input{question5}
 
-%\subsection*{Question 6}
+\subsection*{Equations for questions 6-7}
+
+\begin{equation}
+ \begin{aligned}
+ \label{eq:system7}
+ & \underset{(\bm{A},\bm{q},\bm{f}^{\textrm{supp}})}{\text{minimize}} & \frac{1}{2}\sum_{j=1}^{m}\frac{\ell_{j}q_{j}^{2}}{E_{j}A_{j}} -\mu \log[M - \sum\limits_{j=1}^m\rho_{j}l_{j}A_{j}] \\
+ & &-\mu\sum\limits_{j=1}^m\log[(A_{j}-\underline{A_{j}})(\overline{A_{j}} - A_{j})] = g(\bm{A}, \bm{q}), \\
+ & \text{subject to}
+ & \bm{Bq} = \bm{I}_{\textrm{supp}}\bm{f}^{\textrm{supp}} + \bm{I}_{\textrm{ext}}\bm{f}^{\textrm{ext}},\\
+ \end{aligned}
+\end{equation}
+
+\subsection*{Question 6}
+\input{question6}
 
 %\subsection*{Question 7}
 
