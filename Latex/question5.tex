@@ -6,11 +6,11 @@ The KKT-conditions for \eqref{eq:system6} are as follows:
 \begin{aligned}
 \bm{Dq} = \bm{B}^{T}\bm{\lambda}\\
 \bm{I}^{T}_{\textrm{supp}}\bm{\lambda} = 0 \\
-\bm{K} - \bm{T}\phi - \bm{I}\bm{\gamma} + \bm{I}\bm{\xi} = 0 \\
-\phi_j \geq 0  \text{ for } j = 1,...,m \\
+\bm{K} - \bm{T}\phi - \bm{\gamma} + \bm{\xi} = 0 \\
+\phi \geq 0  \\
 \gamma_j \geq 0 \text{ for } j = 1,...,m \\
 \xi_j \geq 0 \text{ for } j = 1,...,m \\
-\phi_j(\rho_{j}l_{j}A_{j}-M) = 0 \text{ for } j = 1,...,m \\
+\phi(\sum\limits_{j=1}^{m}\rho_{j}l_{j}A_{j}-M) = 0 \\
 \gamma_{j}(A_{j}-\overline{A_{j}}) = 0 \text{ for } j = 1,...,m \\
 \xi_{j}(\underline{A_{j}}-A_{j}) = 0 \text{ for } j = 1,...,m \\
 \end{aligned}
@@ -25,11 +25,6 @@ The KKT-conditions for \eqref{eq:system6} are as follows:
        \rho_{1}l_{1}
        , \hdots,\rho_{m}l_{m}
      \end{bmatrix}^T \\
-&\bm{I} = \begin{bmatrix}
-1 &  &  \text{\large{0}}\\
-  &  \ddots & \\
-\text{\large{0}} &  & 1\\
-\end{bmatrix}
 \end{align*}
 
 Computing the Hessian of our current objective function,

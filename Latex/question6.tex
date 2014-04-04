@@ -62,7 +62,31 @@ By comparing the two systems, we see that the approximations to the Lagrange mul
 \end{align*}
 From this we conclude that
 \begin{align*}
-\phi_j = \frac{\mu}{M-\sum\limits_{j=1}^m\rho_jl_jA_j} \text{ for } j = 1,..,m \\
+\phi = \frac{\mu}{M-\sum\limits_{j=1}^m\rho_jl_jA_j}\\
 \gamma_j = \frac{\mu}{\overline{A}_j-A_j} \text{ for } j = 1,..,m \\
 \xi_j = \frac{\mu}{A_j-\underline{A}_j} \text{ for } j = 1,..,m.
 \end{align*}
+
+Since $g(\bm{A},\bm{q},\bm{f}^{supp})$ have been permuted from the previous objective function with function only dependent on $\bm{A}$, we only need to consider the top left part of the Hessian changing the positive semi-definiteness. We can split the top left corner of the Hessian into two parts, where $\bm{K}$ is the same as before:
+\begin{align*}
+& \bm{\bigtriangledown}_{A}^2 g(\bm{A},\bm{q},\bm{f}^{supp}) = \bm{K} + U(\bm{A}) \\
+U(\bm{A}) = \frac{\mu}{(M-\sum\limits_{j=1}^{m}\rho_jl_jA_j)^2} &
+\begin{bmatrix}
+(\rho_1l_1)^2 & (\rho_1l_1)(\rho_2l_2) & \hdots \\
+(\rho_1l_1)(\rho_2l_2) & (\rho_2l_2)^ 2 & \hdots \\
+\vdots & \vdots & \ddots \\
+\end{bmatrix} + \\
+& \mu 
+\begin{bmatrix}
+\frac{1}{(A_1-\underline{A_{1}})^2} + \frac{1}{(\overline{A_{1}}-A_{1})^2} &  & \text{\large{0}} \\
+  & \ddots &  \\
+\text{\large0} &  & \ddots \\
+\end{bmatrix}
+\end{align*}
+We want to compute $w_{A}^T\bm{\bigtriangledown}_{A}^2g(\bm{A},\bm{q}\bm{f}^{supp}w_A$ for some component $w_A$ of $w\epsilon\Omega$. Since $w_A^T\bm{K}w_A$ is an element of the previous version, it does not contribute to make the matrix not positive semi-definite. Therefore we only compute $w_A^TU(\bf{A})w_A$. It can be shown that:
+\begin{align*}
+w_A^TU(\bm{A})w_A = \frac{(\sum\limits_{j=1}^m\rho_jl_jA_j)^2}{(M-\sum\limits_{j=1}^m\rho_jl_jA_j)^2} + \mu\sum\limits_{j=1}^mA_j^2(\frac{1}{(A_j-\underline{A_{j}})^2} + \frac{1}{(\overline{A_{j}}-A_{j})^2}).
+\end{align*}
+Since all the terms are bigger than or equal to zero, we conclude that \\ $\bm{w}_A^TU(\bm{A})\bm{w}_A \geq 0$, and therefore that $\bm{w}^T\bm{\bigtriangledown}^2 g(\bm{A},\bm{q},\bm{f}^{supp})\bm{w} \geq 0$ for all $\bm{w}\epsilon\Omega$. Thus the Hessian is positive semi-definite, and  $g(\bm{A},\bm{q},\bm{f}^{supp})$ is convex. Since our constraints are affine, by \cite{KKT_suff} we can conclude that the KKT-conditions are both necessary and sufficient for optimality.
+
+
