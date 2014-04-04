@@ -1,0 +1,36 @@
+
+
+The KKT-conditions for \eqref{eq:system6} are as follows:
+\begin{equation}
+\begin{aligned}
+\bm{Dq} = \bm{B}^{T}\bm{\lambda}\\
+\bm{I}^{T}_{\textrm{supp}}\bm{\lambda} = 0 \\
+\bm{K} - \bm{P}\bm{\mu} - \bm{I}\bm{\gamma} + \bm{I}\bm{\xi} = 0 \\
+\mu_j \geq 0  \text{ for } j = 1,...,m \\
+\gamma_j \geq 0 \text{ for } j = 1,...,m \\
+\xi_j \geq 0 \text{ for } j = 1,...,m \\
+\mu_j(\rho_{j}l_{j}A_{j}-M) = 0 \text{ for } j = 1,...,m \\
+\gamma_{j}(A_{j}-\overline{A_{j}}) = 0 \text{ for } j = 1,...,m \\
+\xi_{j}(\underline{A_{j}}-A_{j}) = 0 \text{ for } j = 1,...,m \\
+\end{aligned}
+\end{equation}
+
+\begin{align*}
+&\bm{K} = \begin{bmatrix}
+       -\frac{l_{1}q_{1}^2}{2E_{1}A_{1}^2}
+       , -\frac{l_{2}q_{2}^2}{2E_{2}A_{2}}, ...,-\frac{l_{m}q_{m}^2}{2E_{m}A_{m}}
+     \end{bmatrix}^T \\
+&\bm{P} = \begin{bmatrix}
+\rho_{1}l_{1} &  0  & \ldots & 0\\
+0  &  \rho_{2}l_{2} & \ldots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0  &   0       &\ldots & \rho_{m}l_{m}
+\end{bmatrix}\\
+&\bm{I} = \begin{bmatrix}
+1 &  0  & \ldots & 0\\
+0  &  1 & \ldots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0  &   0  &\ldots & 1 \\
+\end{bmatrix}
+\end{align*}
+
