@@ -1,4 +1,4 @@
-function [A, q, f_supp] = SQP()
+function [A, q, f_supp, energy] = SQP()
 
 rho = 1; E = 1; 
 M = 10; mu = 10^-4;
@@ -19,6 +19,41 @@ switch problem
     v = zeros(3,n);    
     v = generate_v(v,x,y,z);
     v(:,end) = [0.5; 0.5; 2.5];
+    dist = sqrt(3);
+    
+    % initial values:
+    A = 0.12*ones(m,1);
+    q = 0.1*ones(m,1);
+    f_supp = 10000*ones(3*ns,1);
+    lambda = 10*ones(3*n,1);
+    
+
+    [l, B] = generate_truss(m, n, ns, v, dist);
+
+    I_supp = [eye(3 * ns); zeros(3*(n-ns), 3*ns)];%spalloc(3 * (n - ns), 3 * ns, 0)];
+    I_ext = [zeros(3*ns, 3*(n-ns)); eye(3*(n-ns))];%[spalloc(3 * ns, 3 * (n - ns), 0); speye(3 * (n - ns))];
+    
+    % Force on each node
+    f_ext = zeros(3*(n-ns),1); %spalloc(3 * (n - ns), 1, 0);
+    % only non-zero ext load: top node [0.5, 0.5, 2.5] which is node n
+    f_ext(end-2 : end) = [0; 0; -1];
+    
+    force = I_supp*f_supp + I_ext*f_ext;
+
+    
+    case 2
+
+    n = 13;
+    m = 58;
+    ns = 4;     % number of fixed nodes (z = 0)
+    x = [0, 1]; y = [0, 1]; z = [0, 1, 2];    
+    
+    
+    % Coordinates v:
+    v = zeros(3,n);    
+    v = generate_v(v,x,y,z);
+    v(:,end) = [0.5; 0.5; 2.5];
+    dist = sqrt(3);
     
     % initial values:
     A = 0.12*ones(m,1);
@@ -27,14 +62,45 @@ switch problem
     lambda = 10*ones(3*n,1);
 
 
-    [l, B, I_supp, I_ext] = generate_truss(m, n, ns, v);
+    [l, B] = generate_truss(m, n, ns, v, dist);
 
-
+    I_supp = [eye(3 * ns); zeros(3*(n-ns), 3*ns)];%spalloc(3 * (n - ns), 3 * ns, 0)];
+    I_ext = [zeros(3*ns, 3*(n-ns)); eye(3*(n-ns))];%[spalloc(3 * ns, 3 * (n - ns), 0); speye(3 * (n - ns))];
+    
     % Force on each node
     f_ext = zeros(3*(n-ns),1); %spalloc(3 * (n - ns), 1, 0);
     % only non-zero ext load: top node [0.5, 0.5, 2.5] which is node n
-    f_ext(end-2 : end) = [0; 0; -1];
-
+    f_ext(end-2 : end) = [0; 0; 1];
+    
+    force = I_supp*f_supp + I_ext*f_ext;
+    
+    
+    case 3
+        
+        n = 20;
+        ns = 4;
+        m = 94;
+        x = [0, 1, 2, 3, 4]; y = [0, 1]; z = [0, 1];
+        
+        v = zeros(3,n);    
+        v = generate_v(v,x,y,z);
+        dist = sqrt(3);
+        
+        %fixed nodes: node number 1, 5, 6 and 10
+        % fixed = [0,4,0,4;0,0,1,1;0,0,0,0];
+        
+        [l, B] = generate_truss(m, n, ns, v, dist);
+        
+        
+        I_supp = blkdiag(eye(3), [zeros(9,6); eye(6)], [zeros(9,3); eye(3); zeros(30,3)]);
+        pause
+        I_ext = blkdiag([zeros(3,9); eye(9)], [zeros(6,9); eye(9)], [zeros(3,30); eye(30)]);
+        
+        f_ext = zeros(3*(n-ns),1);
+        for i 
+        
+    
+        
 end
 
 %% LOCAL FUNCTIONS
@@ -161,7 +227,7 @@ end
     p = zeros(2*m+3*ns,1);
     iter = 0;
 
-    while convergence(A, q, f_supp) > 5 %% iter < 1000
+    while convergence(A, q, f_supp) > 1 %% iter < 1000
         convergence(A, q, f_supp);
         iter = iter + 1
         % Compute p by solving (18.9)
@@ -219,8 +285,8 @@ end
             
             
     end
-        
-    plot_structure(A,l,v);
+    energy = f(A,q);
+    plot_structure(A,l,v, force);
 
 end
 %%
@@ -243,9 +309,9 @@ end
 
 
 %%
-function [l, B, I_supp, I_ext] = generate_truss(m, n, ns, v)
+function [l, B] = generate_truss(m, n, ns, v, dist)
     % Length of bars [first node, second node, lenght]
-    l = generate_l(v, m, n);
+    l = generate_l(v, m, n, dist);
 
     % Tau, vector of the bar's directional cosines:
     tau = generate_tau(m,v,l);
@@ -253,18 +319,16 @@ function [l, B, I_supp, I_ext] = generate_truss(m, n, ns, v)
     % B-matrix:
     B = generate_B(n, m, tau, l);
 
-    I_supp = [eye(3 * ns); zeros(3*(n-ns), 3*ns)];%spalloc(3 * (n - ns), 3 * ns, 0)];
-    I_ext = [zeros(3*ns, 3*(n-ns)); eye(3*(n-ns))];%[spalloc(3 * ns, 3 * (n - ns), 0); speye(3 * (n - ns))];
 end
 
 
 %%
-function l = generate_l(v, m, n)
+function l = generate_l(v, m, n, dist)
 l = zeros(m,3); 
 it = 1;
 for i = 1:n
     for j = i:n
-        if i ~= j && norm(v(:,i)-v(:,j)) <= sqrt(3)
+        if i ~= j && norm(v(:,i)-v(:,j)) <= dist
             l(it,:) = [i, j, norm(v(:,i)-v(:,j))];
             it = it + 1;
         end
@@ -299,32 +363,31 @@ end
 
 %%    
 
-function plot_structure(A, l, v)
+function plot_structure(A, l, v, force)
 
 m = length(A);
 [~, n] = size(v);
 
-figure
+figure(1)
 hold on
 
-for i = 1:n
-    plot3(v(1,i), v(2,i), v(3,i), 'bo');
-end
-
-
-thickness = A/pi;
+thickness = sqrt(A)/pi;
 for j = 1:m
-    points = 
-    plot3([
-    
+    pts = [v(:,l(j,1))'; v(:,l(j,2))'];
+    plot3(pts(:,1), pts(:,2), pts(:,3), 'LineWidth',25*thickness(j));
+end
+hold on
+
+% for i = 1:n
+%     x = [v(1,i); v(1,i) + force((i-1)*3 + 1)];
+%     y = [v(2,i); v(2,i) + force((i-1)*3 + 2)];
+%     z = [v(3,i); v(3,i) + force((i-1)*3 + 3)];
+%     plot3(x,y,z, 'r');
+% end
+
+
 end
 
 
-
-end
-
-
-
-plot3(pts(:,1), pts(:,2), pts(:,3))
 
 
