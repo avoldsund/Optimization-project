@@ -2,6 +2,7 @@
 
 The KKT-conditions for \eqref{eq:system6} are as follows:
 \begin{equation}
+\label{KKT_system6}
 \begin{aligned}
 \bm{Dq} = \bm{B}^{T}\bm{\lambda}\\
 \bm{I}^{T}_{\textrm{supp}}\bm{\lambda} = 0 \\
@@ -18,7 +19,7 @@ The KKT-conditions for \eqref{eq:system6} are as follows:
 \begin{align*}
 &\bm{K} = \begin{bmatrix}
        -\frac{l_{1}q_{1}^2}{2E_{1}A_{1}^2}
-       , -\frac{l_{2}q_{2}^2}{2E_{2}A_{2}}, ...,-\frac{l_{m}q_{m}^2}{2E_{m}A_{m}}
+       , -\frac{l_{2}q_{2}^2}{2E_{2}A_{2}}, \hdots,-\frac{l_{m}q_{m}^2}{2E_{m}A_{m}}
      \end{bmatrix}^T \\
 &\bm{P} = \begin{bmatrix}
 \rho_{1}l_{1} &  0  & \ldots & 0\\
@@ -33,4 +34,35 @@ The KKT-conditions for \eqref{eq:system6} are as follows:
 0  &   0  &\ldots & 1 \\
 \end{bmatrix}
 \end{align*}
+
+If we let $\bm{w}  \epsilon  \Omega$, we can observe that
+
+\begin{align*}
+&\bm{w}^T\bm{\bigtriangledown}^2 g(\bm{A},\bm{q})\bm{w} = \\
+&\begin{bmatrix}
+A_1 \hdots A_m & q_1 \hdots q_m
+\end{bmatrix}
+\begin{bmatrix}
+\frac{l_1q_1^2}{E_1A_1^3} & 0 & \hdots  & -\frac{l_1q_1}{E_1A_1^2} & 0 & \hdots  & 0 \\[0.3em]
+0 & \ddots &  & 0 & \ddots &  & \vdots\\[0.3em]
+0 &  & \ddots &  0 &  & \ddots\\[0.3em]
+-\frac{l_1q_1}{E_1A_1^2} & 0 & \hdots & \frac{l_1}{E_1A_1}  & 0 & \hdots & 0\\[0.3em]
+0 & \ddots &  & 0 & \ddots & & \vdots \\[0.3em]
+0 &  & \ddots & 0 & \hdots & \ddots \\[0.3em]
+\end{bmatrix}
+\begin{bmatrix}
+A_1 \\
+\vdots\\
+\vdots\\
+A_m\\
+q_1\\
+\vdots\\
+\vdots\\
+q_m\\
+\end{bmatrix} = 0,
+\end{align*}
+and thus $g(\bm{A},\bm{q})$ is positive semi-definite, which is a sufficient condition for convexity. Since all our optimality constraints are affine, then according to \cite{KKT_suff}, (\ref{KKT_system6}) is both necessary and sufficient for optimality for \eqref{eq:system6}.
+
+
+
 
