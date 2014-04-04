@@ -9,21 +9,17 @@ The KKT-conditions for \eqref{eq:system6} are as follows:
 \bm{K} + \frac{\mu}{M-\sum\limits_{j=1}^m\rho_{j}l_{j}A_{j}}\bm{T} - \mu\bm{C} = 0 \\
 \bm{Bq} - \bm{I}_{\textrm{supp}}\bm{f}^{\textrm{supp}} - \bm{I}_{\textrm{ext}}\bm{f}^{\textrm{ext}} = 0 \\
 (\bm{Bq} - \bm{I}_{\textrm{supp}}\bm{f}^{\textrm{supp}} - \bm{I}_{\textrm{ext}}\bm{f}^{\textrm{ext}})^T\bm{\lambda} = 0 \\
-\bm{K} + \bm{T}\bm{\phi} + \bm{\gamma} - \bm{\xi} = 0 \\
-\phi_j \geq 0  \text{ for } j = 1,...,m \\
+\bm{K} + \bm{T}\phi + \bm{\gamma} - \bm{\xi} = 0 \\
+\phi \geq 0  \\
 \gamma_j \geq 0 \text{ for } j = 1,...,m \\
 \xi_j \geq 0 \text{ for } j = 1,...,m \\
-\phi_j(M-\sum\limits_{j=1}^m\rho_{j}l_{j}A_{j}) = 0 \text{ for } j = 1,...,m \\
+\phi(M-\sum\limits_{j=1}^m\rho_{j}l_{j}A_{j}) = 0 \\
 \gamma_{j}(A_{j}-\overline{A_{j}}) = 0 \text{ for } j = 1,...,m \\
 \xi_{j}(\underline{A_{j}}-A_{j}) = 0 \text{ for } j = 1,...,m \\
 \end{aligned}
 \end{equation}
 
 \begin{align*}
-&\bm{T} = \begin{bmatrix}
-       \rho_{1}l_{1}
-       , \hdots,\rho_{m}l_{m}
-     \end{bmatrix}^T \\
 &\bm{C} = \begin{bmatrix}
 \frac{1}{A_1-\underline{A_{1}}} - \frac{1}{\overline{A_{1}}-A_{1}}, \hdots, \frac{1}{A_m-\underline{A_{m}}} - \frac{1}{\overline{A_{m}}-A_{m}}
 \end{bmatrix}^T
@@ -36,16 +32,11 @@ By comparing the two systems, we see that the approximations to the Lagrange mul
 \rho_1l_1 \\
 \vdots \\
 \rho_ml_m\\
-\end{bmatrix} &= 
+\end{bmatrix} &= \phi
 \begin{bmatrix}
-\rho_1l_1 & & \text{\large{0}} \\[0.5em]
- & \ddots &  \\
-\text{\large{0}} & & \rho_ml_m \\[0.5em]
-\end{bmatrix}
-\begin{bmatrix}
-\phi_1 \\
+\rho_1l_1 \\
 \vdots \\
-\phi_m\\
+\rho_ml_m\\
 \end{bmatrix}\\
 \begin{bmatrix}
 \gamma_1 \\
@@ -72,6 +63,6 @@ By comparing the two systems, we see that the approximations to the Lagrange mul
 From this we conclude that
 \begin{align*}
 \phi_j = \frac{\mu}{M-\sum\limits_{j=1}^m\rho_jl_jA_j} \text{ for } j = 1,..,m \\
-\gamma_j = \frac{1}{\overline{A}_j-A_j} \text{ for } j = 1,..,m \\
-\xi_j = \frac{1}{A_j-\underline{A}_j} \text{ for } j = 1,..,m.
+\gamma_j = \frac{\mu}{\overline{A}_j-A_j} \text{ for } j = 1,..,m \\
+\xi_j = \frac{\mu}{A_j-\underline{A}_j} \text{ for } j = 1,..,m.
 \end{align*}
