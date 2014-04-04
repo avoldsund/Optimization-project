@@ -83,9 +83,9 @@ U(\bm{A}) = \frac{\mu}{(M-\sum\limits_{j=1}^{m}\rho_jl_jA_j)^2} &
 \text{\large0} &  & \ddots \\
 \end{bmatrix}
 \end{align*}
-We want to compute $w_{A}^T\bm{\bigtriangledown}_{A}^2g(\bm{A},\bm{q}\bm{f}^{supp}w_A$ for some component $w_A$ of $w\epsilon\Omega$. Since $w_A^T\bm{K}w_A$ is an element of the previous version, it does not contribute to make the matrix not positive semi-definite. Therefore we only compute $w_A^TU(\bf{A})w_A$. It can be shown that:
+We want to compute $\bm{w}_{A}^T\bm{\bigtriangledown}_{A}^2g(\bm{A},\bm{q}\bm{f}^{supp})\bm{w}_A$ for some component $\bm{w}_A$ of $w\epsilon\Omega$. Since $\bm{w}_A^T\bm{K}\bm{w}_A$ is an element of the previous version, it does not contribute to make the matrix not positive semi-definite. Therefore we only compute $\bm{w}_A^TU(\bf{A})\bm{w}_A$. It can be shown that:
 \begin{align*}
-w_A^TU(\bm{A})w_A = \frac{(\sum\limits_{j=1}^m\rho_jl_jA_j)^2}{(M-\sum\limits_{j=1}^m\rho_jl_jA_j)^2} + \mu\sum\limits_{j=1}^mA_j^2(\frac{1}{(A_j-\underline{A_{j}})^2} + \frac{1}{(\overline{A_{j}}-A_{j})^2}).
+\bm{w}_A^TU(\bm{A})\bm{w}_A = \frac{(\sum\limits_{j=1}^m\rho_jl_jA_j)^2}{(M-\sum\limits_{j=1}^m\rho_jl_jA_j)^2} + \mu\sum\limits_{j=1}^mA_j^2(\frac{1}{(A_j-\underline{A_{j}})^2} + \frac{1}{(\overline{A_{j}}-A_{j})^2}).
 \end{align*}
 Since all the terms are bigger than or equal to zero, we conclude that \\ $\bm{w}_A^TU(\bm{A})\bm{w}_A \geq 0$, and therefore that $\bm{w}^T\bm{\bigtriangledown}^2 g(\bm{A},\bm{q},\bm{f}^{supp})\bm{w} \geq 0$ for all $\bm{w}\epsilon\Omega$. Thus the Hessian is positive semi-definite, and  $g(\bm{A},\bm{q},\bm{f}^{supp})$ is convex. Since our constraints are affine, by \cite{KKT_suff} we can conclude that the KKT-conditions are both necessary and sufficient for optimality.
 

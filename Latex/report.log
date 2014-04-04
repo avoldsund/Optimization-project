@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.10.17)  4 APR 2014 15:56
+=======
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.10.17)  4 APR 2014 15:51
+>>>>>>> 2ffa961260b687c194e074d11eee3b2ff0f7461e
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -415,27 +419,50 @@ Overfull \hbox (27.36134pt too wide) detected at line 19
  []
 
 ) (./question5.tex [3] [4]) (./question6.tex [5] [6]) (./question7.tex
+<<<<<<< HEAD
 LaTeX Font Info:    Try loading font information for TS1+pcr on input line 25.
+=======
+LaTeX Font Info:    Try loading font information for TS1+pcr on input line 8.
+>>>>>>> 2ffa961260b687c194e074d11eee3b2ff0f7461e
 
 (/usr/lib/texlive/texmf-dist/tex/latex/psnfss/ts1pcr.fd
 File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
 )
+<<<<<<< HEAD
 LaTeX Font Info:    Try loading font information for OML+pcr on input line 28.
+=======
+LaTeX Font Info:    Try loading font information for OML+pcr on input line 11.
+>>>>>>> 2ffa961260b687c194e074d11eee3b2ff0f7461e
 
 (/usr/lib/texlive/texmf-dist/tex/latex/psnfss/omlpcr.fd
 File: omlpcr.fd 
 )
 LaTeX Font Info:    Font shape `OML/pcr/m/n' in size <8> not available
+<<<<<<< HEAD
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 28.
  [7]
 LaTeX Font Info:    Try loading font information for OMS+pcr on input line 65.
+=======
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 11.
+LaTeX Font Info:    Try loading font information for OMS+pcr on input line 46.
+>>>>>>> 2ffa961260b687c194e074d11eee3b2ff0f7461e
 
 (/usr/lib/texlive/texmf-dist/tex/latex/psnfss/omspcr.fd
 File: omspcr.fd 
 )
 LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <8> not available
+<<<<<<< HEAD
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 65.
 )
+=======
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 46.
+
+Overfull \hbox (104.8757pt too wide) in paragraph at lines 46--48
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[7])
+>>>>>>> 2ffa961260b687c194e074d11eee3b2ff0f7461e
 Underfull \hbox (badness 3439) in paragraph at lines 108--109
 []\OT1/cmr/m/n/10 California In-sti-tute of Tech-nol-ogy, \OT1/cmr/m/it/10 Sep-
 a-rat-ing Hy-per-plane The-o-rems
@@ -447,6 +474,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 108--109
 0 kcb/Notes/SeparatingHyperplane.pdf, 28.
  []
 
+<<<<<<< HEAD
 [8] [9] (./report.aux) ) 
 Here is how much of TeX's memory you used:
  5823 strings out of 493308
@@ -484,6 +512,45 @@ Output written on report.pdf (9 pages, 277126 bytes).
 PDF statistics:
  135 PDF objects out of 1000 (max. 8388607)
  98 compressed objects within 1 object stream
+=======
+[8] (./report.aux) ) 
+Here is how much of TeX's memory you used:
+ 5823 strings out of 493308
+ 78382 string characters out of 6140929
+ 216724 words of memory out of 5000000
+ 9151 multiletter control sequences out of 15000+600000
+ 18391 words of font info for 68 fonts, out of 8000000 for 9000
+ 957 hyphenation exceptions out of 8191
+ 51i,17n,42p,738b,1689s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/lib/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</
+usr/lib/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/lib
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb></usr/lib/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/lib/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/lib/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/lib/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmbx9.pfb></usr/lib/texlive/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmex10.pfb></usr/lib/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmmi10.pfb></usr/lib/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+mi5.pfb></usr/lib/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><
+/usr/lib/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/lib/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/lib/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb></usr/lib/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/lib/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/lib/texlive/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmr17.pfb></usr/lib/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr5.pfb></usr/lib/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmr7.pfb></usr/lib/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pf
+b></usr/lib/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/
+lib/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/lib/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/lib/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/lib/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmti10.pfb></usr/lib/texlive/texmf-dist/fonts/type1/
+urw/courier/ucrr8a.pfb>
+Output written on report.pdf (8 pages, 274811 bytes).
+PDF statistics:
+ 132 PDF objects out of 1000 (max. 8388607)
+ 96 compressed objects within 1 object stream
+>>>>>>> 2ffa961260b687c194e074d11eee3b2ff0f7461e
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
