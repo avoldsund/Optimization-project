@@ -22,19 +22,18 @@ The KKT-conditions for \eqref{eq:system6} are as follows:
        , -\frac{l_{2}q_{2}^2}{2E_{2}A_{2}}, \hdots,-\frac{l_{m}q_{m}^2}{2E_{m}A_{m}}
      \end{bmatrix}^T \\
 &\bm{P} = \begin{bmatrix}
-\rho_{1}l_{1} &  0  & \ldots & 0\\
-0  &  \rho_{2}l_{2} & \ldots & 0\\
-\vdots & \vdots & \ddots & \vdots\\
-0  &   0       &\ldots & \rho_{m}l_{m}
+\rho_{1}l_{1} &  & \text{\large{0}}\\
+ &  \ddots & & \\
+\text{\large{0}} &  & \rho_{m}l_{m}
 \end{bmatrix}\\
 &\bm{I} = \begin{bmatrix}
-1 &  0  & \ldots & 0\\
-0  &  1 & \ldots & 0\\
-\vdots & \vdots & \ddots & \vdots\\
-0  &   0  &\ldots & 1 \\
+1 &  &  \text{\large{0}}\\
+  &  \ddots & \\
+\text{\large{0}} &  & 1\\
 \end{bmatrix}
 \end{align*}
 
+Computing the Hessian of our current objective function,
 \begin{align*}
 \bm{\bigtriangledown}^2 g(\bm{A},\bm{q},\bm{f}^{supp}) =
 \left[\begin{array}{cc|cc|cc}
@@ -44,27 +43,27 @@ The KKT-conditions for \eqref{eq:system6} are as follows:
 0 &\ddots & 0 &\ddots & 0 & \ddots\\[0.3em] \hline
 0 & 0 & 0 & 0 & 0 & 0 \\[0.3em]
 0 & \ddots & 0 & \ddots & 0 & \ddots\\[0.3em]
-\end{array}\right]
+\end{array}\right],
 \end{align*}
-
-If we let $\bm{w}  \epsilon  \Omega$, we can observe that
+and letting $\bm{w}  \epsilon  \Omega$, we observe that
 
 \begin{align*}
 &\bm{w}^T\bm{\bigtriangledown}^2 g(\bm{A},\bm{q},\bm{f}^{supp})\bm{w} = \\
 &\begin{bmatrix}
-A_1 \hdots A_m & q_1 \hdots q_m
+A_1 \hdots A_m & q_1 \hdots q_m & f_{1}^{supp} \hdots f_{m}^{supp}
 \end{bmatrix}
 \bm{\bigtriangledown}^2 g(\bm{A},\bm{q},\bm{f}^{supp})
 \begin{bmatrix}
 A_1 \\
 \vdots\\
-\vdots\\
 A_m\\
 q_1\\
 \vdots\\
-\vdots\\
 q_m\\
-\end{bmatrix} = 0,
+f_{1}^{supp} \\
+\vdots \\
+f_{m}^ {supp}
+\end{bmatrix} = 0.
 \end{align*}
-and thus $g(\bm{A},\bm{q})$ is positive semi-definite, which is a sufficient condition for convexity. Since all our optimality constraints are affine, then according to \cite{KKT_suff}, (\ref{KKT_system6}) is both necessary and sufficient for optimality for \eqref{eq:system6}.
+Thus $g(\bm{A},\bm{q},\bm{f}^{supp})$ is positive semi-definite, which is a sufficient condition for convexity. Since all our optimality constraints are affine, then according to \cite{KKT_suff}, (\ref{KKT_system6}) is both necessary and sufficient for optimality for \eqref{eq:system6}.
 

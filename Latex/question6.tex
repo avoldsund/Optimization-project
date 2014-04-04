@@ -7,8 +7,8 @@ The KKT-conditions for \eqref{eq:system6} are as follows:
 \bm{Dq} = \bm{B}^{T}\bm{\lambda}\\
 \bm{I}^{T}_{\textrm{supp}}\bm{\lambda} = 0 \\
 \bm{K} + \frac{\mu}{M-\sum\limits_{j=1}^m\rho_{j}l_{j}A_{j}}\bm{T} - \mu\bm{C} = 0 \\
-\bm{Bq} = \bm{I}_{\textrm{supp}}\bm{f}^{\textrm{supp}} + \bm{I}_{\textrm{ext}}\bm{f}^{\textrm{ext}} = 0 \\
-\bm{Bq} = \bm{I}_{\textrm{supp}}\bm{f}^{\textrm{supp}} + (\bm{I}_{\textrm{ext}}\bm{f}^{\textrm{ext}})^T\bm{\lambda} = 0 \\
+\bm{Bq} - \bm{I}_{\textrm{supp}}\bm{f}^{\textrm{supp}} - \bm{I}_{\textrm{ext}}\bm{f}^{\textrm{ext}} = 0 \\
+(\bm{Bq} - \bm{I}_{\textrm{supp}}\bm{f}^{\textrm{supp}} - \bm{I}_{\textrm{ext}}\bm{f}^{\textrm{ext}})^T\bm{\lambda} = 0 \\
 \bm{K} + \bm{T}\bm{\phi} + \bm{\gamma} - \bm{\xi} = 0 \\
 \phi_j \geq 0  \text{ for } j = 1,...,m \\
 \gamma_j \geq 0 \text{ for } j = 1,...,m \\
@@ -27,4 +27,51 @@ The KKT-conditions for \eqref{eq:system6} are as follows:
 &\bm{C} = \begin{bmatrix}
 \frac{1}{A_1-\underline{A_{1}}} - \frac{1}{\overline{A_{1}}-A_{1}}, \hdots, \frac{1}{A_m-\underline{A_{m}}} - \frac{1}{\overline{A_{m}}-A_{m}}
 \end{bmatrix}^T
+\end{align*}
+By comparing the two systems, we see that the approximations to the Lagrange multipliers corresponding to the inequality constraints in (\ref{KKT_system6}), in terms of an optimum for (\ref{KKT_system7}), must satisfy the following:
+
+\begin{align*}
+\frac{\mu}{M-\sum\limits_{j=1}^m\rho_jl_jA_j}
+\begin{bmatrix}
+\rho_1l_1 \\
+\vdots \\
+\rho_ml_m\\
+\end{bmatrix} &= 
+\begin{bmatrix}
+\rho_1l_1 & & \text{\large{0}} \\[0.5em]
+ & \ddots &  \\
+\text{\large{0}} & & \rho_ml_m \\[0.5em]
+\end{bmatrix}
+\begin{bmatrix}
+\phi_1 \\
+\vdots \\
+\phi_m\\
+\end{bmatrix}\\
+\begin{bmatrix}
+\gamma_1 \\
+\vdots \\
+\gamma_m\\
+\end{bmatrix} &= \mu
+\begin{bmatrix}
+\frac{1}{\overline{A}_1-A_1} \\
+\vdots \\
+\frac{1}{\overline{A}_m-A_m}\\
+\end{bmatrix}\\
+\begin{bmatrix}
+\xi_1 \\
+\vdots \\
+\xi_m\\
+\end{bmatrix} 
+&= \mu
+\begin{bmatrix}
+\frac{1}{A_1-\underline{A}_1} \\
+\vdots \\
+\frac{1}{A_m-\underline{A}_m}
+\end{bmatrix}.
+\end{align*}
+From this we conclude that
+\begin{align*}
+\phi_j = \frac{\mu}{M-\sum\limits_{j=1}^m\rho_jl_jA_j} \text{ for } j = 1,..,m \\
+\gamma_j = \frac{1}{\overline{A}_j-A_j} \text{ for } j = 1,..,m \\
+\xi_j = \frac{1}{A_j-\underline{A}_j} \text{ for } j = 1,..,m.
 \end{align*}
