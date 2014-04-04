@@ -1,0 +1,74 @@
+\begin{lstlisting}
+
+function [A, q, f_supp] = SQP_lineSearch(A,q,f_supp)
+  
+    global m ns pen par rho l lambda p M A_top A_bottom
+    eta = 0.25;
+    iter = 0;
+    p = zeros(2*m+3*ns,1);
+
+    % Run while KKT-conditions not yet satisfied:
+    while convergence(A, q, f_supp, lambda, p) > 0.001 && iter < 2000 
+        
+        % Compute p and lambda_hat by solving (18.9)
+        sol = solve_newton(A, q, f_supp);
+        
+        p = sol(1:2*m+3*ns);
+        lambda_hat = sol(2*m+3*ns+1:end);
+        p_lambda = lambda_hat - lambda;
+        
+        % Choose penalty parameter to satisfy (18.36) with sigma evaluated:
+        pen = 0.5;
+        % Parameter in (0,1):
+        par = 0.5;
+
+        % Sigma, is 1 if Hessian of L is pos. def.
+        [~,posDef] = chol(hess_L(A,q));
+        if posDef == 0
+            sigma = 1;
+        else
+            sigma = 0;
+        end
+
+        % Penalty parameter must satisfy (18.36) by some margin:
+        while pen*1.1 < (grad_f(A,q)'*p + sigma/2*p'*hess_L(A,q)*p)/((1-par)*norm(c(q, f_supp),1))
+            pen = pen*1.1;
+        end
+
+        alpha = 1;
+        i = 1;
+            
+%       alpha_store(1) = alpha;
+        alpha_new = alpha;
+        
+        % Control that alpha*p leads to a more optimal point in the
+        % feasible set:
+        while ~isValid(alpha_new,eta, A, q, f_supp) || (M-sum(rho*l(:,3).*(A+alpha_new*p(1:m)))) < 0 || ~isempty(find(((A+alpha_new*p(1:m))-A_bottom).*(A_top-(A+alpha_new*p(1:m))) < 0))
+
+            % Use interpolation to find new step:
+%             [alpha_new alpha_store] = interpolation(i,alpha_store, A, q, f_supp); 
+            % Reduce step length by a half
+            alpha_new = alpha_new*0.5;
+            
+            % If it is not possible to choose alpha to satisfy all
+            % criteria:
+            if i > 1000
+                error('initial conditions outside feasible set')
+            end
+            i = i + 1;
+        end
+        alpha = alpha_new;
+
+        % Update A, q, f_supp and lambda with new step length:
+        A = A + alpha*p(1:m);
+        q = q + alpha*p(m+1:2*m);
+        f_supp = f_supp + alpha*p(2*m+1:2*m+3*ns);
+
+        lambda = lambda + alpha*p_lambda;
+            
+            
+    end
+    
+  end
+  
+  \end{lstlisting}
