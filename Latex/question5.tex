@@ -6,7 +6,7 @@ The KKT-conditions for \eqref{eq:system6} are as follows:
 \begin{aligned}
 \bm{Dq} = \bm{B}^{T}\bm{\lambda}\\
 \bm{I}^{T}_{\textrm{supp}}\bm{\lambda} = 0 \\
-\bm{K} - \bm{P}\bm{\phi} - \bm{I}\bm{\gamma} + \bm{I}\bm{\xi} = 0 \\
+\bm{K} - \bm{T}\phi - \bm{I}\bm{\gamma} + \bm{I}\bm{\xi} = 0 \\
 \phi_j \geq 0  \text{ for } j = 1,...,m \\
 \gamma_j \geq 0 \text{ for } j = 1,...,m \\
 \xi_j \geq 0 \text{ for } j = 1,...,m \\
@@ -21,11 +21,10 @@ The KKT-conditions for \eqref{eq:system6} are as follows:
        -\frac{l_{1}q_{1}^2}{2E_{1}A_{1}^2}
        , -\frac{l_{2}q_{2}^2}{2E_{2}A_{2}}, \hdots,-\frac{l_{m}q_{m}^2}{2E_{m}A_{m}}
      \end{bmatrix}^T \\
-&\bm{P} = \begin{bmatrix}
-\rho_{1}l_{1} &  & \text{\large{0}}\\
- &  \ddots & & \\
-\text{\large{0}} &  & \rho_{m}l_{m}
-\end{bmatrix}\\
+&\bm{T} = \begin{bmatrix}
+       \rho_{1}l_{1}
+       , \hdots,\rho_{m}l_{m}
+     \end{bmatrix}^T \\
 &\bm{I} = \begin{bmatrix}
 1 &  &  \text{\large{0}}\\
   &  \ddots & \\
