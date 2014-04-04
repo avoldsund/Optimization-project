@@ -1,5 +1,4 @@
 \begin{lstlisting}
-
 function [A, q, f_supp] = SQP_lineSearch(A,q,f_supp)
   
     global m ns pen par rho l lambda p M A_top A_bottom
@@ -69,6 +68,24 @@ function [A, q, f_supp] = SQP_lineSearch(A,q,f_supp)
             
     end
     
-  end
+end
+\end{lstlisting}
+
   
-  \end{lstlisting}
+\begin{figure}[H]
+\centerline{\includegraphics[scale=0.4]{../Ferdig kode/bridge.pdf}}
+\caption{The bridge structure}
+\label{fig:bridge}
+\end{figure}
+
+\begin{figure}[H]
+\centerline{\includegraphics[scale=0.4]{../Ferdig kode/tower.pdf}}
+\caption{The tower structure}
+\label{fig:tower}
+\end{figure}
+
+\begin{figure}[H]
+\centerline{\includegraphics[scale=0.4]{../Ferdig kode/cantilever.pdf}}
+\caption{The cantilever structure}
+\label{fig:cantilever}
+\end{figure}
