@@ -35,9 +35,9 @@ switch problem
         
         
         [l, B] = generate_truss(m, n, v, dist);
-        
-        I_supp = [eye(3 * ns); zeros(3*(n-ns), 3*ns)];%spalloc(3 * (n - ns), 3 * ns, 0)];
-        I_ext = [zeros(3*ns, 3*(n-ns)); eye(3*(n-ns))];%[spalloc(3 * ns, 3 * (n - ns), 0); speye(3 * (n - ns))];
+
+        I_supp = [speye(3*ns); spalloc(3 * (n - ns), 3 * ns, 0)];
+        I_ext = [spalloc(3 * ns, 3 * (n - ns), 0); speye(3 * (n - ns))];
         
         % Force on each node
         f_ext = zeros(3*(n-ns),1); %spalloc(3 * (n - ns), 1, 0);
@@ -70,8 +70,8 @@ switch problem
         
         [l, B] = generate_truss(m, n, v, dist);
         
-        I_supp = [eye(3 * ns); zeros(3*(n-ns), 3*ns)];%spalloc(3 * (n - ns), 3 * ns, 0)];
-        I_ext = [zeros(3*ns, 3*(n-ns)); eye(3*(n-ns))];%[spalloc(3 * ns, 3 * (n - ns), 0); speye(3 * (n - ns))];
+        I_supp = [speye(3*ns); spalloc(3 * (n - ns), 3 * ns, 0)];
+        I_ext = [spalloc(3 * ns, 3 * (n - ns), 0); speye(3 * (n - ns))];
         
         % Force on each node
         f_ext = zeros(3*(n-ns),1); %spalloc(3 * (n - ns), 1, 0);
@@ -99,13 +99,12 @@ switch problem
         lambda = 100*ones(3*n,1);
         
         %fixed nodes: node number 1, 5, 6 and 10
-%         f_num = [1, 5, 6, 10];
         
         [l, B] = generate_truss(m, n, v, dist);
 
         
-        I_supp = blkdiag(eye(3), [zeros(9,6); eye(6)], [zeros(9,3); eye(3); zeros(30,3)]);
-        I_ext = blkdiag([zeros(3,9); eye(9); zeros(6,9)],  [eye(9); zeros(3,9)],  eye(30));
+        I_supp = sparse(blkdiag(eye(3), [zeros(9,6); eye(6)], [zeros(9,3); eye(3); zeros(30,3)]));
+        I_ext = sparse(blkdiag([zeros(3,9); eye(9); zeros(6,9)],  [eye(9); zeros(3,9)],  eye(30)));
         
         f_ext = zeros(3*(n-ns),1);
         for i = 1:6
