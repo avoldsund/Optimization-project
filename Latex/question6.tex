@@ -6,12 +6,25 @@ The KKT-conditions for \eqref{eq:system6} are as follows:
 \begin{aligned}
 \bm{Dq} = \bm{B}^{T}\bm{\lambda}\\
 \bm{I}^{T}_{\textrm{supp}}\bm{\lambda} = 0 \\
-\bm{K} - \bm{P}\bm{\mu} - \bm{I}\bm{\gamma} + \bm{I}\bm{\xi} = 0 \\
-\mu_j \geq 0  \text{ for } j = 1,...,m \\
+\bm{K} + \frac{\mu}{M-\sum\limits_{j=1}^m\rho_{j}l_{j}A_{j}}\bm{T} - \mu\bm{C} = 0 \\
+\bm{Bq} = \bm{I}_{\textrm{supp}}\bm{f}^{\textrm{supp}} + \bm{I}_{\textrm{ext}}\bm{f}^{\textrm{ext}} = 0 \\
+\bm{Bq} = \bm{I}_{\textrm{supp}}\bm{f}^{\textrm{supp}} + (\bm{I}_{\textrm{ext}}\bm{f}^{\textrm{ext}})^T\bm{\lambda} = 0 \\
+\bm{K} + \bm{T}\bm{\phi} + \bm{\gamma} - \bm{\xi} = 0 \\
+\phi_j \geq 0  \text{ for } j = 1,...,m \\
 \gamma_j \geq 0 \text{ for } j = 1,...,m \\
 \xi_j \geq 0 \text{ for } j = 1,...,m \\
-\mu_j(\rho_{j}l_{j}A_{j}-M) = 0 \text{ for } j = 1,...,m \\
+\phi_j(M-\sum\limits_{j=1}^m\rho_{j}l_{j}A_{j}) = 0 \text{ for } j = 1,...,m \\
 \gamma_{j}(A_{j}-\overline{A_{j}}) = 0 \text{ for } j = 1,...,m \\
 \xi_{j}(\underline{A_{j}}-A_{j}) = 0 \text{ for } j = 1,...,m \\
 \end{aligned}
 \end{equation}
+
+\begin{align*}
+&\bm{T} = \begin{bmatrix}
+       \rho_{1}l_{1}
+       , \hdots,\rho_{m}l_{m}
+     \end{bmatrix}^T \\
+&\bm{C} = \begin{bmatrix}
+\frac{1}{A_1-\underline{A_{1}}} - \frac{1}{\overline{A_{1}}-A_{1}}, \hdots, \frac{1}{A_m-\underline{A_{m}}} - \frac{1}{\overline{A_{m}}-A_{m}}
+\end{bmatrix}^T
+\end{align*}

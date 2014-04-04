@@ -81,11 +81,12 @@ A truss is a mechanical structure constructed of straight elastic members connec
  \begin{aligned}
  \label{eq:system7}
  & \underset{(\bm{A},\bm{q},\bm{f}^{\textrm{supp}})}{\text{minimize}} & \frac{1}{2}\sum_{j=1}^{m}\frac{\ell_{j}q_{j}^{2}}{E_{j}A_{j}} -\mu \log[M - \sum\limits_{j=1}^m\rho_{j}l_{j}A_{j}] \\
- & &-\mu\sum\limits_{j=1}^m\log[(A_{j}-\underline{A_{j}})(\overline{A_{j}} - A_{j})] = g(\bm{A}, \bm{q}), \\
+ & &-\mu\sum\limits_{j=1}^m\log[(A_{j}-\underline{A_{j}})(\overline{A_{j}} - A_{j})] = g(\bm{A}, \bm{q},\bm{f}^{supp}), \\
  & \text{subject to}
  & \bm{Bq} = \bm{I}_{\textrm{supp}}\bm{f}^{\textrm{supp}} + \bm{I}_{\textrm{ext}}\bm{f}^{\textrm{ext}},\\
  \end{aligned}
 \end{equation}
+$\mu > 0$ is a small barrier parameter.
 
 \subsection*{Question 6}
 \input{question6}
